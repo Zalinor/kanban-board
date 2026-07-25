@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kanban Board</title>
+    <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+    <h1>Канбан-доска</h1>
+    <div class="add-task">
+        <input type="text" id="taskInput" placeholder="Создать задачу">
+        <button id="addTaskBtn">Добавить</button>
+    </div>
+    <div class="board">
+        <!-- To Do  -->
+        <div class="column" id="todo">
+            <h2>To Do</h2>
+        <div class="cards"></div>
+        </div>
+        <!-- In Progress  -->
+        <div class="column" id="in-progress">
+            <h2>In Progress</h2>
+        <div class="cards"></div>
+        </div>
+        <!-- Done -->
+        <div class="column" id="done">
+            <h2>Done</h2>
+        <div class="cards"></div>
+        </div>
+    </div>
+
+    <script src="scripts/index.js"></script>
+</body>
+</html>
