@@ -11,7 +11,12 @@ function loadTasks() {
 
 let tasks = loadTasks();
 
+let isRendering = false;
+
 function renderTasks() {
+    if (isRendering) return;
+    isRendering = true;
+
     const columns = {
         "todo": document.querySelector("#todo .cards"),
         "in-progress": document.querySelector("#in-progress .cards"),
@@ -45,9 +50,9 @@ function renderTasks() {
         card.appendChild(deleteBtn);
         columns[task.status].appendChild(card);
     });
+
+    isRendering = false;
 }
-
-
 
 // добавляем задачи
 
@@ -75,7 +80,12 @@ renderTasks();
 
 //срабатывает когда тянешь карточку
 //Сохраняет id перетаскиваемой карточки чтобы использовать в Drop
-function handleDragStart(event) {
+function handleDragStart(event) {   
+    // если какая то карточка в редактировании то запрещаем перетаскивание
+    if (document.querySelector("edit-input")) {
+        event.preventDefault();
+        return;
+    }
     event.dataTransfer.setData("text/plain", event.currentTarget.dataset.id);
 };
 
@@ -144,6 +154,8 @@ function startEditing(span) {
 }
 
 function finishEditing(input, taskId) {
+    if (!document.body.contains(input)) return;
+
     const newText = input.value.trim();
 
     if (newText !== "") {

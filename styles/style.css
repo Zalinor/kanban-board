@@ -1,5 +1,4 @@
 :root {
-  --bg-color: #a39193;
   --card-bg: #ffffff;
   --accent: #0079bf;
   --text-color: rgb(197, 194, 182);
@@ -13,28 +12,69 @@ html, body {
     align-items: center;
 }
 
-body{
-    background-color: var(--bg-color);
-}
-
 .board {
     display: flex;
 }
 
 .column{
-    margin-right: 10px;
+    margin-right: 2px;
     border: 1pt solid black;
-    width: 150px;
+    width: 200px;
     height: 300px;
     display: flex;
     justify-content: flex-start;
-    align-items: flex-start;
     flex-direction: column;
     padding: 5px;
     border-radius: 20px;
+    align-items: center;
 }
 
 .add-task {
     margin: 10px;
 }
 
+.task-text {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.cards {
+    width: 100%;
+    background-color: var(--card-bg);
+    border-radius: 8px;
+    padding: 8px 28px 8px 8px;
+    margin-bottom: 8px;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.delete-btn {
+    position: absolute;
+    top: 2px;
+    right: 4px;
+    width: 18px;
+    height: 18px;
+    border: none;
+    background: none;
+    color: #999;
+    font-size: 14px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0px;
+    border-radius: 50%;
+    opacity: 0;
+    transition: 0.15s;
+}
+
+.delete-btn:hover {
+    background-color: #f0f0f0;
+    color: #d32f2f;
+    opacity: 1;
+}
+
+.container {
+    display: flex;
+    max-width: 1400px;
+    align-items: center;
+    flex-direction: column;
+}
