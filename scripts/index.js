@@ -1,9 +1,15 @@
+// cохраняем задачи в localstorage как строку JSON
+function saveTasks() {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+};
 
-let tasks = [
-    {id:1, text: "", status: "todo"},
-    {id:2, text: "", status: "in-progress"},
-    {id:3, text: "", status: "done"}
-];
+// загружаем данные из локалсторедж
+function loadTasks() {
+    const saved = localStorage.getItem("tasks");
+    return saved ? JSON.parse(saved) : [];
+};
+
+let tasks = loadTasks();
 
 function renderTasks() {
     const columns = {
@@ -47,6 +53,7 @@ addTaskBtn.addEventListener("click", () => {
     };
 
     tasks = [...tasks, newTask];
+    saveTasks();
     input.value = "";
     renderTasks();
 });
@@ -56,7 +63,7 @@ renderTasks();
 //срабатывает когда тянешь карточку
 //Сохраняет id перетаскиваемой карточки чтобы использовать в Drop
 function handleDragStart(event) {
-    event.dataTransfer.setData("text/plain", event.target.dataset.id);
+    event.dataTransfer.setData("text/plain", event.currentTarget.dataset.id);
 };
 
 //срабатывает постоянно, пока перетаскиваемый элемент проносят над колонкой
@@ -84,6 +91,8 @@ function handleDrop(event) {
         }
         return task;
     });
-
+    
+    saveTasks();
     renderTasks();
 };
+

@@ -31,5 +31,10 @@ body{
     align-items: flex-start;
     flex-direction: column;
     padding: 5px;
+    border-radius: 20px;
+}
+
+.add-task {
+    margin: 10px;
 }
 
