@@ -30,6 +30,18 @@ function renderTasks() {
         card.draggable = true; //перетаскивание, без этого свойства перетаскивание невозможно
         card.dataset.id = task.id; //записываем айди в дом элемент
         card.addEventListener("dragstart", handleDragStart);
+
+        // текст задачи обворачиваем в span чтобы сделать еще кнопку удаления
+        const textSpan = document.createElement("span");
+        textSpan.textContent = task.text;
+
+        const deleteBtn = document.createElement("button");
+        deleteBtn.textContent = "x";
+        deleteBtn.className = "delete-btn";
+        deleteBtn.dataset.id = task.id;
+
+        card.appendChild(textSpan);
+        card.appendChild(deleteBtn);
         columns[task.status].appendChild(card);
     });
 }
@@ -77,6 +89,15 @@ document.querySelectorAll(".column").forEach((column) => {
     column.addEventListener("drop", handleDrop);
 });
 
+document.addEventListener("click", (event) => {
+    if (event.target.classList.contains("delete-btn")) {
+        const taskId = Number(event.target.dataset.id);
+        tasks = tasks.filter((task) => task.id !== taskId);
+        saveTasks();
+        renderTasks();
+    }
+});
+
 
 //срабатывает когда карточку опустили над колонкой
 //достаем айдишник задачи, меняем статус на id той колонки куда бросили и ререндерим доску
@@ -91,8 +112,10 @@ function handleDrop(event) {
         }
         return task;
     });
-    
+
     saveTasks();
     renderTasks();
 };
+
+
 
