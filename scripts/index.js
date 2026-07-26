@@ -26,7 +26,6 @@ function renderTasks() {
     tasks.forEach((task) => {
         const card = document.createElement("div");
         card.className = "card";
-        card.textContent = task.text;
         card.draggable = true; //перетаскивание, без этого свойства перетаскивание невозможно
         card.dataset.id = task.id; //записываем айди в дом элемент
         card.addEventListener("dragstart", handleDragStart);
@@ -34,6 +33,8 @@ function renderTasks() {
         // текст задачи обворачиваем в span чтобы сделать еще кнопку удаления
         const textSpan = document.createElement("span");
         textSpan.textContent = task.text;
+        textSpan.className = "task-text";
+        textSpan.dataset.id = task.id;
 
         const deleteBtn = document.createElement("button");
         deleteBtn.textContent = "x";
@@ -89,16 +90,6 @@ document.querySelectorAll(".column").forEach((column) => {
     column.addEventListener("drop", handleDrop);
 });
 
-document.addEventListener("click", (event) => {
-    if (event.target.classList.contains("delete-btn")) {
-        const taskId = Number(event.target.dataset.id);
-        tasks = tasks.filter((task) => task.id !== taskId);
-        saveTasks();
-        renderTasks();
-    }
-});
-
-
 //срабатывает когда карточку опустили над колонкой
 //достаем айдишник задачи, меняем статус на id той колонки куда бросили и ререндерим доску
 function handleDrop(event) {
@@ -117,5 +108,52 @@ function handleDrop(event) {
     renderTasks();
 };
 
+// создаем кнопку удаления задач и вешаем обработчик не на каждую задачку а сразу на документ
+// включаем редактирование при клике на карточку
+document.addEventListener("click", (event) => {
+    if (event.target.classList.contains("delete-btn")) {
+        const taskId = Number(event.target.dataset.id);
+        tasks = tasks.filter((task) => task.id !== taskId);
+        saveTasks();
+        renderTasks();
+    }
+    if (event.target.classList.contains("task-text")) {
+        startEditing(event.target);
+    }
+});
 
+function startEditing(span) {
+    const currentText = span.textContent;
+    const taskId = Number(span.dataset.id);
 
+    const input = document.createElement('input');
+    input.type = "text";    
+    input.value = currentText;
+    input.className = "edit-input";
+
+    span.replaceWith(input);
+    input.focus();
+
+    input.addEventListener("blur", () => finishEditing(input, taskId));
+   
+    input.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+            input.blur();
+        }
+    });
+}
+
+function finishEditing(input, taskId) {
+    const newText = input.value.trim();
+
+    if (newText !== "") {
+        tasks = tasks.map((task) => {
+            if (task.id === taskId) {
+                return {...task, text: newText};
+            }
+            return task;
+        });
+        saveTasks();
+    }
+    renderTasks();
+}
